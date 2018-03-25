@@ -1,0 +1,6 @@
+1. grab daily data of s&p500 from google for ever since 2002 (the reporting act)
+    - s&p500 data up to 2013 downloaded from https://quantquote.com/historical-stock-data
+    - s&p MAX daily from https://finance.yahoo.com/quote/%5EGSPC/history?period1=-630961200&period2=1521950400&interval=1d&filter=history&frequency=1d
+2. calculate volatility for each day for s&p500
+3. get reuters and bloomberg data and put into a db
+4. see if article frequency correlates with volatility by graphing
