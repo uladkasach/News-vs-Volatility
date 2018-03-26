@@ -1,0 +1,3 @@
+- price drop of previous day -> volatility spike (when looking at vol.5.past)
+- difficult to interpret volatility -vs- price because of the past/future relationship of volatility for overday spreads
+- intraday volatility may be more easy to interpret but requires better data
