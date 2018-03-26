@@ -11,6 +11,12 @@
     - bag of words (all, title, content)
     - tf-idf (all, title, content)
 0. generate prediction pipeline on baseline representations
+    - svm
+        - used by [43]
+    - recurrent neural network
+0. assess baseline representations
+0. assess autoencoder representations of news
 
 # eventually
 - assess news occurence -vs- volatility for a particular stock
+- assess "event" representation of news
