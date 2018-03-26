@@ -6,6 +6,7 @@
 - randomized word embeddings are used commonly for further embeddings schemes [38][Bordes et al., 2011; Jenatton et al., 2012].
 - news titles are more useful for prediction compared to news contents. [37][38][ Randinsky et al. [2012]]
     - context: stock price prediction
+    - *** actionalble ***
 - deep neural networks work better than linear models at predicting stock trends [37]
 - if predicting only individual stock based on events using all news to generate events may decrease performance [37]
 - there is a one day delay between news information and stock response in most cases [37][Tetlock, Saar-Tsechansky, and Macskassy (2008)]
@@ -14,7 +15,7 @@
 - news data can significantly affect price of a share of a security [37][Chan, 2003; Tetlock et al., 2008]
 - intraday volatility must be calculated for accurate measurement of volatility for a period[19]
 - volatility tends to rise  following good and bad new [41]
-
+- market change direction can not be predicted well by volatility [44]
 
 
 -----

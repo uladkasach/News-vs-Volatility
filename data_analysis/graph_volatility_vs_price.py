@@ -34,8 +34,9 @@ data["PercentDeltaClose"] = data["DeltaClose"]/data["Close"]; # -> PercentDeltaC
 data["DeltaVolatility"] = data["Volatility"] - data["Volatility"].shift(1);
 data["PercentDeltaVolatility"] = data["DeltaVolatility"]/data["Volatility"];
 
-#print(data["PercentDeltaClose"]);
-
+## calculate return
+data["Return"] = (data["Close"] - data["Open"])/data["Open"]; ## percent change from open
+data["LogReturn"] = np.log(np.abs(data["Return"]))
 
 ## reduce date range to requested range
 if(args.start_year is not None):
@@ -47,15 +48,15 @@ if(args.end_year is not None):
 
 ## plot the data
 if(args.delta):
-    if(False):
-        ax = data.plot(x='DateFloat', y=['PercentDeltaClose', 'PercentDeltaVolatility'], kind='bar', color=['blue', 'red'])
-    else:
-        ax = data.plot(x='DateFloat', y='PercentDeltaClose', kind='line', style='b-',  marker='o')
-        data.plot(x='DateFloat', y='PercentDeltaVolatility', kind='line', style='r-', marker='x', ax=ax, secondary_y=True)
+    ax = data.plot(x='DateFloat', y='PercentDeltaClose', kind='line', style='b-',  marker='o')
+    data.plot(x='DateFloat', y='PercentDeltaVolatility', kind='line', style='r-', marker='x', ax=ax, secondary_y=True)
 else:
     ax = data.plot(x='DateFloat', y='Close', kind='line', style='b-',  marker='o')
     data.plot(x='DateFloat', y='Volatility', kind='line', style='r-', marker='x', ax=ax, secondary_y=True)
-#data.plot(x='DateFloat', y='Volume', kind='line', style='g-', marker='x', ax=ax, secondary_y=True)
+
+ax = data.plot(x="DateFloat", y="Return", kind='line', style='b-',  marker='o')
+data.plot(x='DateFloat', y='Volatility', kind='line', style='r-', marker='x', ax=ax, secondary_y=True)
+
 plt.show();
 
 ### READ: http://www.ccsenet.org/journal/index.php/ijef/article/viewFile/5894/4675%3Forigin%3Dpublication_detail

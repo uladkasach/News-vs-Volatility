@@ -5,7 +5,6 @@
 ### [2] Automated news reading: Stock price prediction based on financial news using context-capturing feature
 - 2013
 - https://www.sciencedirect.com/science/article/pii/S0167923613000651
-- https://s3.amazonaws.com/academia.edu.documents/44137759/Automated_news_reading_Stock_price_prediction_based_on_financial_news_using_contextcapturing_features.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1519058318&Signature=2MmOK5ZqS8gXz2l6iPKhXP1%2BQqg%3D&response-content-disposition=inline%3B%20filename%3DAutomated_news_reading_Stock_price_predi.pdf
 - they "enhance existing text mining methods by using more expressive features to represent text and by employing market feedback as part of our feature selection process."
 - Questions:
     - context-capturing features = ?
@@ -16,7 +15,11 @@
     - market drift
     - stock price (intra day and daily)
 - **VERY STRONG ARTICLE**
+- > our approach allows selecting semantically relevant features and thus, reduces the problem of over-fitting when
+applying a machine learning
 
+- most solutions involve using bagofwords / TF-IDF
+- up to 76% when using "combinations of words" + feature selection
 
 
 ### [3] stock trend prediction using news sentiment analysis - arXiv

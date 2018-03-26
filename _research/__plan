@@ -1,4 +1,16 @@
-1. grab daily data of s&p500 from google for ever since 2002 (the reporting act)
-2. calculate volatility for each day for s&p500
-3. get reuters and bloomberg data and put into a db
-4. see if article frequency correlates with volatility by graphing
+# immediately
+0. generate market volatility data
+    1. <s>grab daily data of s&p500 from google for ever since 2002 (the reporting act)
+    2. <s>calculate volatility for each day for s&p500
+        - prior, future, center
+0. inspect market returns -vs- volatility
+0. assess news occurance -vs- volatility
+    1. get reuters and bloomberg data and put into a db
+    2. see if article frequency correlates with volatility by graphing
+0. generate baseline representations of news (see `ideas/text_rep...` for all)
+    - bag of words (all, title, content)
+    - tf-idf (all, title, content)
+0. generate prediction pipeline on baseline representations
+
+# eventually
+- assess news occurence -vs- volatility for a particular stock

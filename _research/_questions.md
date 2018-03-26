@@ -21,6 +21,8 @@
             - for overall
 
 
-- How well does volatility predict market drop?
-    - statistical analysis
-    - read 
+- although market direction can not be predicted when volatility is predicted, can not trading during volatile periods still reduce risks?
+
+
+- How to determine WHICH TYPES (semantic) of news are most relevant to prediction?
+    - e.g., semantic data is extracted from news and then a model will generate a prediction based on the semantics

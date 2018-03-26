@@ -1,7 +1,4 @@
 
-
-# predicting volatility with newsA
-
 ### [16]  Measuring and Testing the Impact of News on Volatility
 - Engle, Robert F., and Victor K. Ng.
 - http://www.jstor.org/stable/pdf/2329066.pdf
@@ -37,15 +34,3 @@
 - Campbell, John Y., and Ludger Hentschel.Journal of financial Economics 31.3 (1992): 281-318.
 > It seems plausible that an increase in stock market volatility raises required stock returns, and thus lowers stock prices.
 We find that volatility feedback normally has little effect on returns, but it can be important during periods of high volatility
-
-
-
-
-### [43] - Predicting risk from financial reports with regression."
-- Kogan, Shimon, et al. Proceedings of Human Language Technologies: The 2009 Annual Conference of the North American Chapter of the Association for Computational Linguistics. Association for Computational Linguistics, 2009.
-- http://www.aclweb.org/anthology/N09-1031
-- ***VALUE and CAPABILITY and UTILITY of predicting Volatility***
-- definition of volatility
-- using annual earnings report use NLP to predict market volatility for next year
-    - compare with results of NLP technique + previous data (since volatility is autoregressive) to see how much NLP adds
-- ~15% MSE
