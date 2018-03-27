@@ -1,13 +1,18 @@
 # immediately
-0. generate market volatility data
+1. <s>generate market volatility data
     1. <s>grab daily data of s&p500 from yahoo
     2. <s>calculate volatility for each day for s&p500
         - prior, future, center
-0. <s>inspect market returns -vs- volatility
-0. retrieve news data and normalize the data
+2. <s>inspect market returns -vs- volatility
+3. <s> retrieve news data and normalize the data
     - use the dataset from [37], [38]: https://github.com/philipperemy/financial-news-dataset
-0. assess news occurrence -vs- volatility
-    1. get reuters and bloomberg data and put into a db
+    - normalize:
+        1. load all data into pandas
+        2. cast "date" field into readable date
+        3. extract "catagory" from url of reuters news
+0. <s> explore the news data
+    4. <s>assess frequency of news / day
+0. <s> assess news occurrence -vs- volatility
     2. see if article frequency correlates with volatility by graphing
 0. label market periods as "high", "moderate", and "low" volatility
 0. assess term frequency of words per region of each type of period

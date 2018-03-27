@@ -1,10 +1,8 @@
 '''
-    analysis:
+    normalization:
     1. load all data into pandas
     2. cast "date" field into readable date
     3. extract "catagory" from url of reuters news
-    4. assess frequency of news / day
-    5. assess frequency of each catagory of news / day
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -95,7 +93,7 @@ args = parser.parse_args();
 print("loading data");
 data = pd.read_csv(args.path_news, sep='\t', index_col=[0], names = ["index", "TimeStamp", "Title", "URL"]);
 
-## extract Date  and Time from Timestamp
+## noramlize timestamp
 print("normalizing `TimeStamp` field")
 data["TimeStamp"] = data["TimeStamp"].apply(lambda x: normalize_timestamp(x));
 
