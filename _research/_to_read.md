@@ -1,3 +1,20 @@
+Deep Learning Stock Volatility with Google Domestic Trends: https://arxiv.org/pdf/1512.04916.pdf
+https://www.researchgate.net/profile/Eric_Nichols3/publication/287250000_Deep_Learning_Stock_Volatilities_with_Google_Domestic_Trends/links/5796e9af08aec89db7b8628a/Deep-Learning-Stock-Volatilities-with-Google-Domestic-Trends.pdf
+
+-----
+
+S.S. Groth, J. Muntermann, An intraday market risk management approach based
+on textual analysis, Decision Support Systems 50 (2011) 680–691.
+- > Groth and Muntermann [11] predict intraday
+market risk based on German adhoc announcements and use single
+words as features. The authors are one of the few in the field to employ
+Chi2
+-based feature selection including exogenous market feedback.
+However, accuracy values are not comparable to our work due
+to a different classification task, i.e., the prediction of intraday market
+risk
+------------
+
 From CMU paper:
 
 Luss, Ronny, and Alexandre d’Aspremont. "Predicting abnormal returns from news using text classification." Quantitative Finance 15.6 (2015): 999-1012.

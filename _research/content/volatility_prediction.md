@@ -106,3 +106,15 @@ Wang, J., & Wang, J. (2016).  Energy, 102, 365-374.
 
 ### [35] Application of artificial neural network models and principal component analysis method in predicting stock prices on Tehran Stock Exchange.
 Zahedi, J., & Rounaghi, M. M. (2015). Physica A: Statistical Mechanics and its Applications, 438, 178-187.
+
+#### [45] Deep Learning Stock Volatility with Google Domestic Trends
+-  https://www.researchgate.net/profile/Eric_Nichols3/publication/287250000_Deep_Learning_Stock_Volatilities_with_Google_Domestic_Trends/links/5796e9af08aec89db7b8628a/Deep-Learning-Stock-Volatilities-with-Google-Domestic-Trends.pdf
+- Ruoxuan Xiong1, Eric P. Nichols2 and Yuan Shen*3
+- 2016
+
+- notable information:
+    - method of predicting intraday volatility based on daily info
+    - they use "log" for return info
+    - they use Mutual-Information as visualization for feature selection (?)
+- other references:
+    - ref 3: volatility prediction

@@ -21,6 +21,32 @@ applying a machine learning
 - most solutions involve using bagofwords / TF-IDF
 - up to 76% when using "combinations of words" + feature selection
 
+- Feature engineering:
+    - feedback for feature extraction: positive -vs- negative class based on "market reaction" for each news article
+        - *QUESTION*: does this not fall for the problem of having inaccurate labels? News that has no reaction may be labeled as having a reaction
+    - steps of extaction:
+        - extraction
+            - words, word combinations
+        - selection
+            - based on market reaction (feedback)
+        - representation
+            - tf-idf
+
+    - details:
+        - extraction:
+            - "dictaionry-approach" : pos-neg word list of psychology handbook
+            - bag of words
+            - N-Gram (2gram)
+            - Noun Phrases
+            - 2 word combinations
+                - e.g., skip N words in between
+        - selection:
+            - Chi-square and Bi-normal-separation
+- Data Source
+    - corporate announcements
+- **inovation**: feature selection
+- strong literature review
+
 
 ### [3] stock trend prediction using news sentiment analysis - arXiv
 - https://arxiv.org/pdf/1607.01958
