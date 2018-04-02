@@ -13,8 +13,8 @@ def convert_to_date_float(date_string):
 ## parse arguments
 parser = argparse.ArgumentParser(description='Graph Volatility -vs- Price');
 parser.add_argument('path_volatility', help='Path to Volatility');
-parser.add_argument('-lt', '--low_threshold', metavar='NUM', default ="abs volatility threshold");
-parser.add_argument('-ht', '--high_threshold', metavar='NUM', default="abs volatility threshold");
+parser.add_argument('-lt', '--low_threshold', metavar='NUM', type=float, default=0.00816 );# default found w/ volatility_distribution.py
+parser.add_argument('-ht', '--high_threshold', metavar='NUM', default=0.0154);
 args = parser.parse_args();
 
 ## get historicals data
@@ -32,7 +32,12 @@ def determine_label(volatility):
     else:
         return "LOW";
 data["Label"] = data["Volatility"].apply(lambda x: determine_label(x));
-print(data);
 
 # export dataframe to cv
-volatility_dataframe.to_csv("../data/sp500.vol.nonlog."+str(args.volatility_period)+"."+args.direction+"."+args.start_year + "_to_" + args.end_year+".csv")
+file_name = args.path_volatility.split("/")[-1];
+dir_path = "/".join(args.path_volatility.split("/")[:-1]);
+name_parts = file_name.split(".");
+name_parts.insert(-1, "labeled");
+file_name = ".".join(name_parts);
+file_path = dir_path + "/" + file_name;
+data.to_csv(file_path,  columns=["Date", "Volatility", "Label"], index=False)

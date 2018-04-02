@@ -69,3 +69,12 @@ ax = data.plot(x="DateFloat", y="Volatility", style = "bo");
 plt.axhline(y=med_thres, color='y', linestyle='-')
 plt.axhline(y=high_thres, color='r', linestyle='-')
 plt.show()
+
+
+'''
+    mean : 0.00815524723929, stdev : 0.00576349845325
+    low  : [0, 0.00815524723929]
+    med  : [0.00815524723929, 0.0153596203059]
+    high : [0.0153596203059, +inf]
+    {'high': 555, 'med': 2080, 'low': 4476}
+'''
