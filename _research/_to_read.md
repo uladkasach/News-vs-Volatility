@@ -1,3 +1,11 @@
+http://people.ee.duke.edu/~lcarin/sent2vec_emnlp2017.pdf
+Learning generic sentence representations ^^ CNN + RNN
+
+https://cs.stanford.edu/~quocle/paragraph_vector.pdf
+^^ representations of sentences - Mikolov
+
+-----
+
 Deep Learning Stock Volatility with Google Domestic Trends: https://arxiv.org/pdf/1512.04916.pdf
 https://www.researchgate.net/profile/Eric_Nichols3/publication/287250000_Deep_Learning_Stock_Volatilities_with_Google_Domestic_Trends/links/5796e9af08aec89db7b8628a/Deep-Learning-Stock-Volatilities-with-Google-Domestic-Trends.pdf
 

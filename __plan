@@ -17,6 +17,15 @@
 0. label market periods as "high", "moderate", and "low" volatility
 0. assess term frequency of words per region of each type of period
     - e.g., past 5 days of news, past 10 days of news, past month of news
+    1. <s> tokenize each title of each news report w/ date
+    2. for each range, assess frequency of words -vs- label
+    3. consider tf-idf assessment instead of just frequency
+0. assess text clustering of news articles -vs- each type of period
+    - e.g., tf-idf kmeans
+    - e.g., word-vectors summaries kmeans
+        - word2vec average
+        - sentence representations
+            - see atleast the two papers in the _to_read.md section
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)
