@@ -67,6 +67,12 @@ date_to_end = convert_to_date_float(date_to_end);
 days_to_subtract = args.period;
 data["Tokens"] = data["Date"].apply(lambda date: extract_full_tokens(date, days_to_subtract, date_to_start, date_to_end))
 
+## remove NaN values
+orig_len = len(data.index)
+data = data.dropna() # if any col is null in a row, remove it
+data = data.reset_index();
+filt_len = len(data.index);
+print("dates filtered out: " + str(orig_len - filt_len))
 
 ## output the normalized data
 file_path = "../data/combined/tokens_for_each_vol."+str(args.period) + "_days_before." + args.start_year + "_to_" + args.end_year + ".csv";

@@ -14,18 +14,45 @@
     4. <s>assess frequency of news / day
 0. <s> assess news occurrence -vs- volatility
     2. see if article frequency correlates with volatility by graphing
-0. label market periods as "high", "moderate", and "low" volatility
-0. assess term frequency of words per region of each type of period
-    - e.g., past 5 days of news, past 10 days of news, past month of news
-    1. <s> tokenize each title of each news report w/ date
-    2. for each range, assess frequency of words -vs- label
-    3. consider tf-idf assessment instead of just frequency
-0. assess text clustering of news articles -vs- each type of period
-    - e.g., tf-idf kmeans
-    - e.g., word-vectors summaries kmeans
-        - word2vec average
-        - sentence representations
-            - see atleast the two papers in the _to_read.md section
+0. assess news titles -vs- volatility - basic feature representation
+    0. <s> label market periods as "high", "moderate", and "low" volatility
+    0. <s> tokenize each title of each news report
+        - include date + tokens list
+        - generates : `news/...tokens.csv`
+    0. <s> generate list of all tokens found in past X days of news for each volatility day
+        - generates: `combined/tokens_for_each_vol...`
+        - e.g., past 2, 5, 10 days of news (x=[2, 5, 10, 15])
+        1. <s> for each volatility, get past X days of news of that volatility day, and generate list of all tokens from news for that period
+            - dont include the volatility day, since we want to predict based on previous data
+    0. assess term frequency of words -vs- labels
+        - use `combined/tokens_for_each_vol` data
+        - assess term frequency differences between:
+            - low and high over all years
+            - high volatility across several years
+            - low volatility across several years
+            - low and high over several years
+        1. generate full list of tokens for each class in range
+        2. evaluate differences between classes in range
+    0. repeat above task with normalization of frequencies
+    0. repeat above with tf-idf representations of the ranges+labels as documents
+    0. calculate tf-idf of each `combined/tokens_for_each_vol...`
+        - generates `combined/tokens_for_each_vol.tf-idf.csv`
+    0. assess vol_based tf-idf of ranges+labels
+        - must determine best way to combine tf-idf of each news_volatility per range+label
+    0. consider other representations of text that may capture data relevant to predicting period
+        - tf-idf of each document before merging into `vol_based.period` datas
+        - basic word vector combinations
+            - averaging
+            - averaging nouns
+        - SEARCH LITERATURE
+    0. assess promising representations of data relevant to predicing period statistically
+        - promising representations are those generated from above task
+    0. assess text clustering of news articles -vs- each type of period
+        - e.g., tf-idf kmeans
+        - e.g., word-vectors summaries kmeans
+            - word2vec average
+            - sentence representations
+                - see atleast the two papers in the _to_read.md section
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)
