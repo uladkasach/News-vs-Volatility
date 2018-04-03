@@ -9,6 +9,7 @@ import argparse
 import pandas as pd
 import datetime as dt
 import ast
+import pandas_util.parallel as pandas_parallel
 
 
 ## methods
@@ -24,16 +25,19 @@ def reduce_to_requested_date_range(data, date_to_start, date_to_end):
 parser = argparse.ArgumentParser(description='Graph Volatility -vs- Price');
 parser.add_argument('-l', '--path_labels', help='Path to Volatility Labels');
 parser.add_argument('-n', '--path_news', metavar='PATH', help="Path to News Data")
-parser.add_argument('-s', '--start_year', metavar='YYYY', default = "2015");
+parser.add_argument('-s', '--start_year', metavar='YYYY', default = "2018");
 parser.add_argument('-e', '--end_year', metavar='YYYY', default="2018");
+parser.add_argument('-w', '--workers', metavar="D", type=int, default=2)
 parser.add_argument('-p', '--period', metavar='DAYS', type=int, default=2);
 args = parser.parse_args();
 
 ## get data - filter out by date as well
 date_to_start = (args.start_year+"-01-01"); # first day of the year
 date_to_end = (args.end_year+"-12-31"); # last day of the year
+print("reading vol_data");
 vol_data = pd.read_csv(args.path_labels);
 vol_data = reduce_to_requested_date_range(vol_data, date_to_start, date_to_end);
+print("reading news data");
 news_data = pd.read_csv(args.path_news);
 news_data = reduce_to_requested_date_range(news_data, date_to_start, date_to_end);
 
@@ -57,17 +61,33 @@ def extract_full_tokens(day, days_to_subtract, date_to_start, date_to_end):
         tokens = ast.literal_eval(tokens);
         full_tokens.extend(tokens);
 
+    ## increment counter and output result for this thread
+    if(this_day % 10 == 0):
+        print("on day " + str(this_day) + " out of " + str(total_days));
+    global this_day;
+    this_day += 1;
+
+    ## return result
     return full_tokens;
 
 
 ## for each day in volatility data, create a bag of words dict for words/frequencies found in that period
+print("extracting full tokens for range")
 data = vol_data; # rename dataframe now that we're going to be appending tokens for each date
 date_to_start = convert_to_date_float(date_to_start);
 date_to_end = convert_to_date_float(date_to_end);
 days_to_subtract = args.period;
-data["Tokens"] = data["Date"].apply(lambda date: extract_full_tokens(date, days_to_subtract, date_to_start, date_to_end))
+total_days = len(data.index);
+this_day = 0;
+def applicator(date):
+    result = extract_full_tokens(date, days_to_subtract, date_to_start, date_to_end); ## get full_tokens
+    return result; ## return result
+# tokens_result = data["Date"].apply(lambda date: extract_full_tokens(date, days_to_subtract, date_to_start, date_to_end))
+tokens_result = pandas_parallel.apply_by_multiprocessing(data["Date"], applicator, workers=args.workers);
+data["Tokens"] = tokens_result;
 
 ## remove NaN values
+print("filtering out NaN values")
 orig_len = len(data.index)
 data = data.dropna() # if any col is null in a row, remove it
 data = data.reset_index();

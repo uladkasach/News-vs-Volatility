@@ -1,0 +1,4 @@
+- tokens_for_each_vol
+    - use :
+        - news_tokens
+        - vol_labels
