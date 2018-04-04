@@ -1,5 +1,6 @@
 '''
-    list all tokens for each volatility day
+    list all text for each volatility day
+        - uses non-tokenized news
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,7 +12,6 @@ import datetime as dt
 import ast
 import pandas_util.parallel as pandas_parallel
 
-
 ## methods
 def convert_to_date_float(date_string):
     return dt.datetime.strptime(date_string,'%Y-%m-%d').date()
@@ -22,13 +22,14 @@ def reduce_to_requested_date_range(data, date_to_start, date_to_end):
     return data;
 
 ## parse arguments
-parser = argparse.ArgumentParser(description='Graph Volatility -vs- Price');
+parser = argparse.ArgumentParser();
 parser.add_argument('-l', '--path_labels', help='Path to Volatility Labels');
 parser.add_argument('-n', '--path_news', metavar='PATH', help="Path to News Data")
 parser.add_argument('-s', '--start_year', metavar='YYYY', default = "2018");
 parser.add_argument('-e', '--end_year', metavar='YYYY', default="2018");
 parser.add_argument('-w', '--workers', metavar="D", type=int, default=2)
 parser.add_argument('-p', '--period', metavar='DAYS', type=int, default=2);
+parser.add_argument('-r', '--readable_output', action='store_true');
 args = parser.parse_args();
 
 ## get data - filter out by date as well
@@ -39,6 +40,7 @@ vol_data = pd.read_csv(args.path_labels);
 vol_data = reduce_to_requested_date_range(vol_data, date_to_start, date_to_end);
 print("reading news data");
 news_data = pd.read_csv(args.path_news);
+news_data["Date"] = news_data["TimeStamp"].apply(lambda timestamp: timestamp[:10]); ## extract date from timestamp
 news_data = reduce_to_requested_date_range(news_data, date_to_start, date_to_end);
 
 ## methods
@@ -56,10 +58,7 @@ def extract_full_tokens(day, days_to_subtract, date_to_start, date_to_end):
     relevant_news = reduce_to_requested_date_range(news_data, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'));
 
     # retreive all tokens from the relevant articles
-    full_tokens = [];
-    for tokens in relevant_news["Tokens"].tolist():
-        tokens = ast.literal_eval(tokens);
-        full_tokens.extend(tokens);
+    full_text = relevant_news["Title"].tolist();
 
     ## increment counter and output result for this thread
     if(this_day % 10 == 0):
@@ -68,7 +67,7 @@ def extract_full_tokens(day, days_to_subtract, date_to_start, date_to_end):
     this_day += 1;
 
     ## return result
-    return full_tokens;
+    return full_text;
 
 
 ## for each day in volatility data, create a bag of words dict for words/frequencies found in that period
@@ -82,9 +81,12 @@ this_day = 0;
 def applicator(date):
     result = extract_full_tokens(date, days_to_subtract, date_to_start, date_to_end); ## get full_tokens
     return result; ## return result
-# tokens_result = data["Date"].apply(lambda date: extract_full_tokens(date, days_to_subtract, date_to_start, date_to_end))
-tokens_result = pandas_parallel.apply_by_multiprocessing(data["Date"], applicator, workers=args.workers);
-data["Tokens"] = tokens_result;
+if(args.workers == 1):
+    tokens_result = data["Date"].apply(lambda date: applicator(date))
+else:
+    tokens_result = pandas_parallel.apply_by_multiprocessing(data["Date"], applicator, workers=args.workers);
+data["Texts"] = tokens_result;
+print(data["Texts"]);
 
 ## remove NaN values
 print("filtering out NaN values")
@@ -98,5 +100,8 @@ print("dates filtered out: " + str(orig_len - filt_len))
 #data = pd.DataFrame(data[["Date", "Volatility", "Label", "Tokens"]]);
 
 ## output the normalized data
-file_path = "../data/combined/tokens_for_each_vol."+str(args.period) + "_days_before." + args.start_year + "_to_" + args.end_year + ".hdf";
-data.to_hdf(file_path, "data", mode='w');
+file_path = "../data/vol_day/text."+str(args.period) + "_days_before." + args.start_year + "_to_" + args.end_year;
+data.to_hdf(file_path+".hdf", "data", mode='w');
+if(args.readable_output):
+    print("readable output");
+    data.to_csv(file_path  + ".csv", index=False);

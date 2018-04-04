@@ -12,7 +12,7 @@ import datetime as dt
 import ast
 import pandas_util.parallel as pandas_parallel
 from collections import Counter
-
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 ## parse arguments
 parser = argparse.ArgumentParser();
@@ -24,8 +24,13 @@ args = parser.parse_args();
 ## retreive data
 data = pd.read_hdf(args.path_labels,'data');
 
-## calculate frequencies
-data["Freq"] = data["Tokens"].apply(lambda tokens: Counter(tokens)) # store the counter directly
+## extract corpus from data
+corpus = data["Tokens"]
+
+## initialize the tf calculator
+tfidf = TfidfVectorizer(analyzer='word', ngram_range=(1,3), min_df = 0, stop_words = 'english')
+tfidf_matrix =  tf.fit_transform(corpus)
+feature_names = tf.get_feature_names()
 
 ## drop the tokens data
 data = data.drop("Tokens", axis=1);
