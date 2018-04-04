@@ -25,7 +25,7 @@ args = parser.parse_args();
 data = pd.read_hdf(args.path_labels,'data');
 
 ## calculate frequencies
-data["Freq"] = data["Tokens"].apply(lambda tokens: Counter(tokens).most_common())
+data["Freq"] = data["Tokens"].apply(lambda tokens: Counter(tokens)) # store the counter directly
 
 ## drop the tokens data
 data = data.drop("Tokens", axis=1);

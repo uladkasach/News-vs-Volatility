@@ -40,18 +40,9 @@ if(args.period not in ["all", "year", "month"]):
 
 ## retreive data
 print("reading data");
-chunks = pd.read_csv(args.path_data, chunksize=args.chunk_size);
+data = pd.read_hdf(args.path_data, 'data');
 print("done reading data");
 
-## cast tokens to list tokens - from ast strings
-if(True):
-    print("evaluating all tokens");
-    def applicator(tokens):
-        return ast.literal_eval(tokens);
-    tokens_result = pandas_parallel.apply_by_multiprocessing(data["Tokens"], applicator, workers=args.workers);
-    #tokens_result = data["Tokens"].apply(lambda tokens: ast.literal_eval(tokens));
-    data["Tokens"] = tokens_result;
-    #print(data["Tokens"].tolist()[0][0]);
 
 ## group dates by labels
 datagroups = data.groupby("Label");
@@ -61,22 +52,30 @@ datagroups = data.groupby("Label");
 ## extract word frequency counts for each group from groups
 def extract_frequency_dataframe(datagroups, section_label):
     section = datagroups.get_group(section_label); # select the group
-    tokens_lists = section["Tokens"].tolist(); # extract tokens to list
-    tokens = [item for sublist in tokens_lists for item in sublist]; # 'flatten' token list
-    token_length = len(tokens); # calculate token length
-    counts = Counter(tokens); # calculate frequency of each word
-    counts = pd.DataFrame(counts.most_common(), columns=["Token", "Frequency"]); # cast frequencies to dataframe
-    counts["Frequency"] = counts["Frequency"].apply(lambda x: x/float(token_length))
+    print("`-> summing frequencies")
+    frequency = section["Freq"].sum()
+    print("`-> converting to df")
+    counts = pd.DataFrame(frequency.most_common(), columns=["Token", "Frequency"]); # cast frequencies to dataframe
+    print("`-> getting total")
+    total = counts["Frequency"].sum();
+    print("`-> normalizing")
+    counts["Frequency"] = counts["Frequency"].apply(lambda x: x/float(total))
+    print("`-> sorting")
+    counts = counts.sort_values(by=['Frequency'], ascending=False)
     return counts # return result
 print(datagroups.groups.keys())
+print("extracting high counts")
 high_counts = extract_frequency_dataframe(datagroups, "HIGH");
+print("extracting low counts");
 low_counts = extract_frequency_dataframe(datagroups, "LOW");
 
 ## keep only top X words for each
+print("extracting heads");
 high_counts = high_counts.head(args.top);
 low_counts = low_counts.head(args.top);
 
 ## merge based on outer join
+print("merging counts");
 comparison_counts = pd.merge(high_counts, low_counts,  on="Token", how='outer')
 comparison_counts = comparison_counts.fillna(0); # replace NaN with 0
 
@@ -87,6 +86,7 @@ file_args_modifier = args.start_year+"_to_"+args.end_year+".top_"+str(args.top);
 
 
 ## compute and record difference
+print("outputting comparisons");
 if(True):
     ## compute
     print("computing difference");
@@ -101,7 +101,7 @@ if(True):
 
     ## output
     print("recording difference");
-    comparison.to_csv("results/compare.labels.difference."+file_args_modifier+".csv");
+    comparison.to_csv("results/compare/labels.difference."+file_args_modifier+".csv");
 
 
 ## compute and record ratio

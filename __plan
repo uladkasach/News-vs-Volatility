@@ -24,7 +24,7 @@
         - e.g., past 2, 5, 10 days of news (x=[2, 5, 10, 15])
         1. <s> for each volatility, get past X days of news of that volatility day, and generate list of all tokens from news for that period
             - dont include the volatility day, since we want to predict based on previous data
-    0. assess term frequency of words -vs- labels
+    0. assess normalized term frequency of words -vs- labels
         - use `combined/tokens_for_each_vol` data
         - assess term frequency differences between:
             - low and high over all years
@@ -33,8 +33,6 @@
             - low and high over several years
         1. generate full list of tokens for each class in range
         2. evaluate differences between classes in range
-    0. repeat above task with normalization of frequencies
-    0. repeat above with tf-idf representations of the ranges+labels as documents
     0. calculate tf-idf of each `combined/tokens_for_each_vol...`
         - generates `combined/tokens_for_each_vol.tf-idf.csv`
     0. assess vol_based tf-idf of ranges+labels
