@@ -30,6 +30,7 @@ parser.add_argument('-t', '--top', type = int, help ='how many to keep when comp
 parser.add_argument('-s', '--start_year', metavar='YYYY', default = "1990");
 parser.add_argument('-e', '--end_year', metavar='YYYY', default = "2018");
 parser.add_argument('-w', '--workers', metavar='D', type=int, default=2);
+parser.add_argument('-c', '--chunk_size', metavar='D', help='chunk size', type=int, default=500)
 args = parser.parse_args();
 
 ## validate arguments
@@ -39,7 +40,7 @@ if(args.period not in ["all", "year", "month"]):
 
 ## retreive data
 print("reading data");
-data = pd.read_csv(args.path_data);
+chunks = pd.read_csv(args.path_data, chunksize=args.chunk_size);
 print("done reading data");
 
 ## cast tokens to list tokens - from ast strings

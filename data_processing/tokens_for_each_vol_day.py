@@ -94,6 +94,9 @@ data = data.reset_index();
 filt_len = len(data.index);
 print("dates filtered out: " + str(orig_len - filt_len))
 
+## reduce data
+#data = pd.DataFrame(data[["Date", "Volatility", "Label", "Tokens"]]);
+
 ## output the normalized data
-file_path = "../data/combined/tokens_for_each_vol."+str(args.period) + "_days_before." + args.start_year + "_to_" + args.end_year + ".csv";
-data.to_csv(file_path, columns=["Date", "Volatility", "Label", "Tokens"], index=False)
+file_path = "../data/combined/tokens_for_each_vol."+str(args.period) + "_days_before." + args.start_year + "_to_" + args.end_year + ".hdf";
+data.to_hdf(file_path, "data", mode='w');
