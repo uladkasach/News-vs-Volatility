@@ -1,0 +1,78 @@
+## certain
+
+### Data Extraction
+1. retreive data
+    - reuters for news
+    - yahoo daily s&p for historicals
+2. calculate volatility
+    - calculate volatility based on s&p500 so that we are competing with VIX
+    - dont use log to make the volatility more understandable
+    - stdev of returns
+    - we calculate the next X days of volatility as our volatility measure
+        - since we are trying to forcast volatility, like VIX
+            - note however that VIX forcasts next 30 days while we are only dealing w/ 5 - more actionable but likely more challenging
+3. categorize volatility - label into HIGH, MEDIUM, LOW periods
+    - assess volatility distribution and generate the thresholds based on standard deviation and mean
+4. define the vol_day
+    - vol_day is a datapoint consisting of features and a label
+        - label: HIGH, MEDIUM, or LOW volatility
+        - features: list of news articles released in the past X days before that day of volatility
+
+
+### Data Exploration
+1. inspect volatility
+    - inspect vol -vs- historicals
+    - inspect vol -vs- news frequency
+
+
+### Feature Creation
+- base granularity:
+    - raw text based features
+        - not likely to be useful based off of `vol_day text -vs- volatility` assessment
+    - document based features
+        - likely to be most useful, since each may refer to specific events / ideas
+    - event based features
+        - may be powerful, used in literature
+- tasks:
+    6. assess vol_day text -vs- volatility
+        - assess token frequency -vs- volatility
+            - e.g., "scarry" and "crash" occurence -> HIGH; "profit" and "stable" -> LOW
+            - RESULT: no clear relationship between news title token frequency and volatility
+        - assess vol_day text TF-IDF representations -vs- volatility *[done]*
+            - calculate TF-IDF vectors for each vol_day cumulative text
+            - assess how well vectors can seperate between each class
+                - k-means clustering purity
+                - classification performance
+        - assess word vector combinations -vs- volatility
+            - assess as above
+    7. assess documents (news articles) -vs- volatility
+        - assess different representations of documents and whether they contain information useful to predicting volatility
+        - representations
+            - tf-idf
+            - word vector representation
+                - averaging
+                - averaging nouns
+            - SEARCH LITERATURE
+    8. assess vol_day documents -vs- volatility
+        - this is a proxy for evaluating how well a classifier will be able to use these documents to predict volatility
+        - assess the documents found in each vol_day -vs- volatility
+        - use best document representations
+        - consider recurrent network to learn vol_day document based representation
+    9. research plausible feature learning techniques for representing documents
+        - autoencoder
+        - variational autoencoder
+        - autoencoder which also is weighted on whether or not it can predict label of volatility it is apart of (?)
+            - difficult since we can not assume that just because it is apart of a vol_day that document actually relates to volatility
+            - may need to use feature engineered labels for documents and itterativly improve if this is a consideration
+
+
+### Classification
+- naive classification, ignore time series information
+- advanced classification, utilize time series information
+
+
+## some day
+- consider calculating intraday volatility
+    - we are using past 5 days, but a paper has shown how to map daily statistics into intraday volatility
+- consider updating volatility calculation
+    - we are calculating return as open to close change, but other paper has calculated it as Close to Close

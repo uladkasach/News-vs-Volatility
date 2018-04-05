@@ -14,8 +14,10 @@
     4. <s>assess frequency of news / day
 0. <s> assess news occurrence -vs- volatility
     2. see if article frequency correlates with volatility by graphing
-0. assess news titles -vs- volatility - basic feature representation
-    0. <s> label market periods as "high", "moderate", and "low" volatility
+0. <s> label market periods as "high", "moderate", and "low" volatility
+0. <s> assess vol_day text -vs- volatility - basic feature representation - token level representations - very naive
+    - combine text found in past X days of a volatility (a vol_day) and see if it corresponds to volatility
+        - e.g., the words "drop" and "crash" are probably related to more volatile days. see if we can find this from a naive search
     0. <s> tokenize each title of each news report
         - include date + tokens list
         - generates : `news/...tokens.csv`
@@ -23,7 +25,7 @@
         - generates: `combined/tokens_for_each_vol...`
         - e.g., past 2, 5, 10 days of news (x=[2, 5, 10, 15])
         1. <s> for each volatility, get past X days of news of that volatility day, and generate list of all tokens from news for that period
-            - dont include the volatility day, since we want to predict based on previous data
+            - don't include the volatility day, since we want to predict based on previous data
     0. <s> assess normalized term frequency of words -vs- labels
         - use `combined/tokens_for_each_vol` data
         - assess term frequency differences between:
@@ -33,26 +35,36 @@
             - low and high over several years
         1. generate full list of tokens for each class in range
         2. evaluate differences between classes in range
+    - **RESULT:** no clear relationship between simply the words seen in the past 2 days and the future 5 day volatility
+        - different combinations of past x days and past 5 days not explored becuase it does not seem very likely (nor interesting)
+            - it is more likely that the real information is stored when words are used in context, in a document by document representation or even sequential document representations
+0. assess vol_day text -vs- volatility - TF-IDF representation
     0. calculate tf-idf of each `combined/tokens_for_each_vol...`
         - generates `combined/tokens_for_each_vol.tf-idf.csv`
         - calculates tf-idf using each vol_day as a document
-
     0. assess vol_based tf-idf of ranges+labels
-        - must determine best way to combine tf-idf of each news_volatility per range+label
-    0. consider other representations of text that may capture data relevant to predicting period
+        - cluster the TF-IDF vectors w/ kmeans and see if the classes divide well
+        - classify the TF-IDF vectors and see if performance is good
+0. assess documents -vs- volatility - document level representation
+    - more reflective of where real value is (some documents do affect vol and some do not)
+    - consider representations of documents that may capture data relevant to predicting volatility
         - tf-idf of each document before merging into `vol_based.period` datas
         - basic word vector combinations
             - averaging
             - averaging nouns
         - SEARCH LITERATURE
-    0. assess promising representations of data relevant to predicing period statistically
+    - assess promising representations of data relevant to predicing period statistically
         - promising representations are those generated from above task
-    0. assess text clustering of news articles -vs- each type of period
-        - e.g., tf-idf kmeans
-        - e.g., word-vectors summaries kmeans
-            - word2vec average
-            - sentence representations
-                - see atleast the two papers in the _to_read.md section
+        - consider clustering each document and then seeing whether clusters contain good separation of classes
+        - other assessment methods
+    0. TF-IDF representation
+        0. represent documents as TF-IDF vectors
+        0. assess TF-IDF vector documents w/ clustering
+    0.
+0. assess vol_day documents -vs- volatility - combination of documents into representation for past vol_day relevant news
+    - e.g., combine document level representations
+    - consider using sequential occurrence of documents ?
+        - e.g., RNN
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)

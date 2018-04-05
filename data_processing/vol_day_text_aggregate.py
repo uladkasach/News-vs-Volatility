@@ -35,6 +35,13 @@ data["Text"] = data["Texts"].apply(lambda texts: flatten_texts(texts)) # store t
 ## drop the texts data
 data = data.drop("Texts", axis=1);
 
+## remove rows with null
+orig_len = len(data.index)
+data = data.dropna() # if any col is null in a row, remove it
+data = data.reset_index();
+filt_len = len(data.index);
+print("dates filtered out: " + str(orig_len - filt_len));
+
 ## output the normalized data
 file_name = args.path_labels.split("/")[-1];
 dir_path = "/".join(args.path_labels.split("/")[:-1]);
