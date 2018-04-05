@@ -43,14 +43,14 @@ corpus = data["Text"].tolist();
 print("documents : " + str(len(corpus)));
 
 ## calculate tf-idf for corpus
-tfidf = TfidfVectorizer(analyzer='word', ngram_range=(1,3), min_df = 0, stop_words = 'english')
+tfidf = TfidfVectorizer(analyzer='word', ngram_range=(1,3), min_df = 3, stop_words = 'english'); # dont consider words that occur less than 3 times
 print("fitting tfidf to corpus");
 tfidf_matrix =  tfidf.fit_transform(corpus)
 feature_names = tfidf.get_feature_names()
 
 ## reduce dimensionality with SVD (- this results in us running LSA since LSA = TF-IDF + SVD)
 print("reducing dimensionality");
-svd = TruncatedSVD(n_components=400, n_iter=7)
+svd = TruncatedSVD(n_components=400, n_iter=7);
 lsa_matrix = svd.fit_transform(tfidf_matrix)
 
 ## append the vector of each row to the data
