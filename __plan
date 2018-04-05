@@ -39,12 +39,20 @@
         - different combinations of past x days and past 5 days not explored becuase it does not seem very likely (nor interesting)
             - it is more likely that the real information is stored when words are used in context, in a document by document representation or even sequential document representations
 0. assess vol_day text -vs- volatility - TF-IDF representation
-    0. calculate tf-idf of each `combined/tokens_for_each_vol...`
+    0. <s> calculate tf-idf of each `combined/tokens_for_each_vol...`
         - generates `combined/tokens_for_each_vol.tf-idf.csv`
         - calculates tf-idf using each vol_day as a document
     0. assess vol_based tf-idf of ranges+labels
         - cluster the TF-IDF vectors w/ kmeans and see if the classes divide well
         - classify the TF-IDF vectors and see if performance is good
+    *** RESULT:***
+        - 64 gigs not enough memory to generate TFIDF-SVD min3 vectors  for 2007-2018
+        - clustering (evaluated w/ 2014-2018 tfidf-svd min3 vectors):
+            - 6 clusters -> avg ~51% purity (when normalized to reflect HIGH FOUND / ALL HIGH)
+            - 15 clusters -> avg ~65% purity (but still the ABS purity of high in the best cluster is very low!)
+            - summary: highs are scattered across all classes. even if high is max purity normalized (e.g., 24% of highs are in a class and surpass 14% of lows - its still ~14 highs compared to 500 lows)
+                - NO GOOD SEPARATION
+        - classification:
 0. assess documents -vs- volatility - document level representation
     - more reflective of where real value is (some documents do affect vol and some do not)
     - consider representations of documents that may capture data relevant to predicting volatility

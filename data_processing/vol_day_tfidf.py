@@ -57,7 +57,7 @@ lsa_matrix = svd.fit_transform(tfidf_matrix)
 def grab_vector_for_row(row):
     vector = (lsa_matrix[row.name, :]);
     vector = list(vector);
-    print(vector);
+    #print(vector);
     return vector;
 data["Vector"] = data.apply(grab_vector_for_row, axis = 1);
 
