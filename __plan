@@ -53,6 +53,13 @@
             - summary: highs are scattered across all classes. even if high is max purity normalized (e.g., 24% of highs are in a class and surpass 14% of lows - its still ~14 highs compared to 500 lows)
                 - NO GOOD SEPARATION
         - classification:
+            - RF for 2014-2018 :
+                - when setting classweight of HIGH to 100 (compared to 1 and 1 for low and med) recall is great (some of the time for test...). precision is bad though in both training and testing. (~20%)
+                    - good precision for test may be comming from overfitting train data: if overfit then when we see another datapoint from similar time period it will likely classify it correctly since news overlapps
+                        - ***TODO*** change test/train split so that test is in future of split - not randomly distributed
+            - RF for 2007-2018
+                - 1. update calculation of TFIDF-SVD min3 to only have dimensionality of 300 and see if that enables us to gen the labels
+                    - if that doesn't work, try with min5 
 0. assess documents -vs- volatility - document level representation
     - more reflective of where real value is (some documents do affect vol and some do not)
     - consider representations of documents that may capture data relevant to predicting volatility
