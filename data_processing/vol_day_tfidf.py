@@ -21,6 +21,8 @@ parser = argparse.ArgumentParser();
 parser.add_argument('path_text', help='Path to vol_day/text...flat.hdf');
 parser.add_argument('-w', '--workers', metavar="D", type=int, default=2);
 parser.add_argument('-r', '--readable_output', action='store_true');
+parser.add_argument('-d', '--dimensionality', metavar="D", type=int, default=300);
+parser.add_argument('-m', '--min_freq', metavar="D", type=int, default=3);
 args = parser.parse_args();
 
 ## retreive data
@@ -43,14 +45,14 @@ corpus = data["Text"].tolist();
 print("documents : " + str(len(corpus)));
 
 ## calculate tf-idf for corpus
-tfidf = TfidfVectorizer(analyzer='word', ngram_range=(1,3), min_df = 3, stop_words = 'english'); # dont consider words that occur less than 3 times
+tfidf = TfidfVectorizer(analyzer='word', ngram_range=(1,3), min_df = args.min_freq, stop_words = 'english'); # dont consider words that occur less than 3 times
 print("fitting tfidf to corpus");
 tfidf_matrix =  tfidf.fit_transform(corpus)
 feature_names = tfidf.get_feature_names()
 
 ## reduce dimensionality with SVD (- this results in us running LSA since LSA = TF-IDF + SVD)
 print("reducing dimensionality");
-svd = TruncatedSVD(n_components=400, n_iter=7);
+svd = TruncatedSVD(n_components=args.dimensionality, n_iter=7);
 lsa_matrix = svd.fit_transform(tfidf_matrix)
 
 ## append the vector of each row to the data
@@ -68,7 +70,7 @@ data = data.drop("Text", axis=1);
 file_name = args.path_text.split("/")[-1];
 dir_path = "/".join(args.path_text.split("/")[:-1]);
 name_parts = file_name.split(".");
-name_parts[0] = "tfidf.svd"; # replace text w/ tfidf.svd
+name_parts[0] = "tfidf.svd.dim_"+str(args.dimensionality); # replace text w/ tfidf.svd
 name_parts = name_parts[:-1]; # drop extension
 file_name = ".".join(name_parts);
 file_path = dir_path + "/" + file_name;
