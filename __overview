@@ -33,6 +33,16 @@
         - likely to be most useful, since each may refer to specific events / ideas
     - event based features
         - may be powerful, used in literature
+- feature types:
+    - events
+    - text
+        - tf-idf
+        - word vectors
+        - events
+        - document catagories
+            - can be found with google cloud or w/ spacy : https://spacy.io/usage/examples#textcat
+        - sentiment
+            - google cloud / spacy
 - tasks:
     6. assess vol_day text -vs- volatility
         - assess token frequency -vs- volatility
@@ -64,7 +74,6 @@
         - autoencoder which also is weighted on whether or not it can predict label of volatility it is apart of (?)
             - difficult since we can not assume that just because it is apart of a vol_day that document actually relates to volatility
             - may need to use feature engineered labels for documents and itterativly improve if this is a consideration
-
 
 ### Classification
 - naive classification, ignore time series information

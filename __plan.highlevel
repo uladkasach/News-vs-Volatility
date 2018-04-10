@@ -1,0 +1,26 @@
+1. get data
+2. basic data analysis
+3. information extraction
+    - volatility + labels
+4. feature extraction
+    1. assess bag of words representation
+        - vol_day:bag_of_words -vs- volatility, assess manually:
+            - see whether words between low and high change significantly
+        - ** result:** no, information likely resides on the sentence (or document) level (- which include context)
+    2. assess tf-idf representations
+        - vol_day:tfidf-svd -vs- volatility:
+            - assess w/ classification and clustering
+            - **result**
+                - clustering does not find good seperation
+                - classification *__IN_PROGRESS__*
+            - **reflection**
+                - the actual information comes from the individual articles written. analyzing the articles, rather than the cumulation, may give better results.
+        - document:tfidf-svd -vs volatility
+            - assess the tfidf-svd representation of documents -vs- volatliity; assess document representations
+            - predict volatility with document representations
+    - to explore:
+        - word vector combinations
+        - document catagory
+        - document entities
+        - document sentiment
+        - combinations of features

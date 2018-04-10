@@ -44,7 +44,11 @@
         - calculates tf-idf using each vol_day as a document
     0. assess vol_based tf-idf of ranges+labels
         - cluster the TF-IDF vectors w/ kmeans and see if the classes divide well
-        - classify the TF-IDF vectors and see if performance is good
+        - classify the TF-IDF vectors and see if performance is good (since vol_days are labeled already - we generate a feature)
+            - <s> RF
+                - 2014-2018 data
+                - 2007-2018 data
+            - NN
     *** RESULT:***
         - 64 gigs not enough memory to generate TFIDF-SVD min3 vectors  for 2007-2018
         - clustering (evaluated w/ 2014-2018 tfidf-svd min3 vectors):
@@ -60,10 +64,13 @@
             - RF for 2007-2018 :
                 - 1. update calculation of TFIDF-SVD min3 to only have dimensionality of 300 and see if that enables us to gen the labels
                     - if that doesn't work, try with min5
-0. assess documents -vs- volatility - document level representation
+                    - IN PROGRESS
+            - NN for 2014-2018 :
+                - IN PROGRESS
+0. assess documents -vs- volatility - document level TF-IDF representation
     - more reflective of where real value is (some documents do affect vol and some do not)
     - consider representations of documents that may capture data relevant to predicting volatility
-        - tf-idf of each document before merging into `vol_based.period` datas
+        - tfidf
         - basic word vector combinations
             - averaging
             - averaging nouns
@@ -73,13 +80,38 @@
         - consider clustering each document and then seeing whether clusters contain good separation of classes
         - other assessment methods
     0. TF-IDF representation
-        0. represent documents as TF-IDF vectors
+        0. <s> represent documents as TF-IDF vectors
         0. assess TF-IDF vector documents w/ clustering
-    0.
+            - **consider**
+                - no clear label for which document corresponds to what volatility
+            - plan:
+                - define which documents belong to each vol_day
+                - conduct tf-idf on each document
+                - evaluate error by:
+                    - determining purity of the label of each document in a cluster
+                        - **NOTE:** labels are probabilistic in this context
+            - <s> define ids of each news document (correspoding to ids in tf-idf dataframe) that is part of each vol_day
+            - calculate probability of a document being found in a vol_day labeled X
+                - generates news/label_probability. ...
+                - since vol_day documents overlap (e.g., past 2 days or past 3 days) some documents are right on the border - we are not as sure whether these documents are high or low class
+                - so, if the document is found in 3 labels - 2 HIGH and 1 MED, make sure that its probability for HIGH=2/3, MED=1/3, LOW=0
+                - the probability measure will then be used to calculate error more accurately
+            - cluster and evaluate purity of clusters
+                - consider how to calculate purity given that some documents are part of high and low days
+                - perhaps the "error" should be considered as 1 - probability of being that label
+                    - e.g., if predicted HIGH and has 2/3 probability of being HIGH error = 1-2/3 = 1/3;
+                    - e.g., if predicted HIGH and has 100% prob of being HIGH, error = 1-1=0;
+        0. assess TF-IDF vector documents w/ classification
+            - methods:
+                1. predict probability of it being part of a labeled vol_day
+            - error metric:
+                - as before, consider the probability of being in the label -vs- prediction
 0. assess vol_day documents -vs- volatility - combination of documents into representation for past vol_day relevant news
-    - e.g., combine document level representations
-    - consider using sequential occurrence of documents ?
-        - e.g., RNN
+    - predict vol_day based on these documents (BASELINE FOR GOAL)
+    - methods:
+        - e.g., combine document level representations
+        - consider using sequential occurrence of documents ?
+            - e.g., RNN
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)
