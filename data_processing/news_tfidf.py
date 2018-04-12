@@ -56,7 +56,7 @@ data = reduce_to_requested_date_range(data, date_to_start, date_to_end);
 orig_len = len(data.index)
 data = data.dropna() # if any col is null in a row, remove it
 filt_len = len(data.index);
-print("dates filtered out: " + str(orig_len - filt_len));
+print("n/a dates filtered out: " + str(orig_len - filt_len));
 
 ## reset index so that now index of dataframe correlates with index of corpus output in next part
 data = data.reset_index(drop=True)
@@ -95,7 +95,7 @@ data = data.drop("Title", axis=1);
 file_name = args.path_news.split("/")[-1];
 dir_path = "/".join(args.path_news.split("/")[:-1]);
 name_parts = file_name.split(".");
-name_parts.insert(-1, "tfidf.svd.dim_"+str(args.dimensionality));
+name_parts.insert(-1, "tfidf.svd.dim_"+str(args.dimensionality)+"."+args.start_year+"_to_"+ args.end_year);
 name_parts = name_parts[:-1]; # drop extension
 file_name = ".".join(name_parts);
 file_path = dir_path + "/" + file_name;

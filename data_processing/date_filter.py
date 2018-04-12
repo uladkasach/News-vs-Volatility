@@ -31,24 +31,31 @@ def reduce_to_requested_date_range(data):
         data = data[data.Date < date_to_end];
     return data;
 
-
 ## parse arguments
 parser = argparse.ArgumentParser(description='Analyze News');
 parser.add_argument('path_news', help='Path to Normalized News Data');
 parser.add_argument('-s', '--start_year', metavar='YYYY', default = "1990");
 parser.add_argument('-e', '--end_year', metavar='YYYY', default="2018");
+parser.add_argument('-hdf', '--read_as_hdf', action='store_true');
 args = parser.parse_args();
 
 ## get news data
 print("loading data");
-data = pd.read_csv(args.path_news);
+if(args.read_as_hdf):
+    data = pd.read_hdf(args.path_news, 'data');
+else:
+    data = pd.read_csv(args.path_news);
 
+## append date column if needed
+if 'Date' not in data.columns:
+    data["Date"] = data["TimeStamp"].apply(lambda timestamp: timestamp[:10]);
 
 ## reduce date range to requested range
 print("filtering by date range")
 data = reduce_to_requested_date_range(data);
 
 ## output the normalized data
+print("outputting data");
 file_name = args.path_news.split("/")[-1];
 dir_path = "/".join(args.path_news.split("/")[:-1]);
 name_parts = file_name.split(".");

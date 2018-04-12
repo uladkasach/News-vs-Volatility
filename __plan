@@ -95,7 +95,7 @@
                     - determining purity of the label of each document in a cluster
                         - **NOTE:** labels are probabilistic in this context
             1. <s> define ids of each news document (correspoding to ids in tf-idf dataframe) that is part of each vol_day
-            2. calculate probability of a document being found in a vol_day labeled X
+            2. <s> calculate probability of a document being found in a vol_day labeled X
                 - generates news/label_probability. ...
                 - since vol_day documents overlap (e.g., past 2 days or past 3 days) some documents are right on the border - we are not as sure whether these documents are high or low class
                 - so, if the document is found in 3 labels - 2 HIGH and 1 MED, make sure that its probability for HIGH=2/3, MED=1/3, LOW=0

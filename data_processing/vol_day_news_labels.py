@@ -18,6 +18,7 @@ args = parser.parse_args();
 ## read data
 print("reading indicies")
 data = pd.read_hdf(args.path_indicies, 'data');
+print(data);
 
 ## extract by each row
 print("extracting label frequencies");
@@ -30,7 +31,7 @@ for index, row in data.iterrows():
         if(index_name not in frequencies): frequencies[index_name] = dict({"LOW":0, "MEDIUM":0, "HIGH":0});
         frequencies[index_name][this_label] += 1;
 label_data = (pd.DataFrame.from_dict(frequencies, orient='index'));
-#print(label_data);
+print(label_data);
 
 ## define probabilities
 print("appending label probabilities");
@@ -51,6 +52,7 @@ data = label_data;
 file_name = args.path_indicies.split("/")[-1];
 file_name_no_ext = ".".join(file_name.split(".")[:-1])
 file_path = "../data/vol_day/news_labels." + file_name_no_ext;
+print("file_path: " + file_path)
 data.to_hdf(file_path+".hdf", "data", mode='w');
 if(args.readable_output):
     print("readable output");
