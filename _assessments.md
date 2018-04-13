@@ -3,10 +3,13 @@
         - <s> bag of words / frequency
     - clustering
         - <s> tf-idf
-    - classificaiton
-        - <s> tf-idf
+    - classification - vol_day labels
+        - <s> tf-idf RF
+        - tf-idf NN
 2. evaluate document level representations
     - clustering
         - <s> tf-idf
-    - classification
+    - regression - [vector->vol_day label] predict the chance that it will be part of a HIGH label
+        - tf-idf
+    - ordered regression - [document_vectors->vol_day label]
         - tf-idf
