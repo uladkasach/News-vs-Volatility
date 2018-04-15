@@ -1,0 +1,118 @@
+1. <s>generate market volatility data
+    1. <s>grab daily data of s&p500 from yahoo
+    2. <s>calculate volatility for each day for s&p500
+        - prior, future, center
+2. <s>inspect market returns -vs- volatility
+3. <s> retrieve news data and normalize the data
+    - use the dataset from [37], [38]: https://github.com/philipperemy/financial-news-dataset
+    - normalize:
+        1. load all data into pandas
+        2. cast "date" field into readable date
+        3. extract "catagory" from url of reuters news
+0. <s> explore the news data
+    4. <s>assess frequency of news / day
+0. <s> assess news occurrence -vs- volatility
+    2. see if article frequency correlates with volatility by graphing
+0. <s> label market periods as "high", "moderate", and "low" volatility
+0. <s> assess vol_day text -vs- volatility - basic feature representation - token level representations - very naive
+    - combine text found in past X days of a volatility (a vol_day) and see if it corresponds to volatility
+        - e.g., the words "drop" and "crash" are probably related to more volatile days. see if we can find this from a naive search
+    0. <s> tokenize each title of each news report
+        - include date + tokens list
+        - generates : `news/...tokens.csv`
+    0. <s> generate list of all tokens found in past X days of news for each volatility day
+        - generates: `combined/tokens_for_each_vol...`
+        - e.g., past 2, 5, 10 days of news (x=[2, 5, 10, 15])
+        1. <s> for each volatility, get past X days of news of that volatility day, and generate list of all tokens from news for that period
+            - don't include the volatility day, since we want to predict based on previous data
+    0. <s> assess normalized term frequency of words -vs- labels
+        - use `combined/tokens_for_each_vol` data
+        - assess term frequency differences between:
+            - low and high over all years
+            - high volatility across several years
+            - low volatility across several years
+            - low and high over several years
+        1. generate full list of tokens for each class in range
+        2. evaluate differences between classes in range
+    - **RESULT:** no clear relationship between simply the words seen in the past 2 days and the future 5 day volatility
+        - different combinations of past x days and past 5 days not explored becuase it does not seem very likely (nor interesting)
+            - it is more likely that the real information is stored when words are used in context, in a document by document representation or even sequential document representations
+0. <s> assess vol_day text -vs- volatility - TF-IDF representation
+    0. <s> calculate tf-idf of each `combined/tokens_for_each_vol...`
+        - generates `combined/tokens_for_each_vol.tf-idf.csv`
+        - calculates tf-idf using each vol_day as a document
+    0. assess vol_based tf-idf of ranges+labels
+        - cluster the TF-IDF vectors w/ kmeans and see if the classes divide well
+        - classify the TF-IDF vectors and see if performance is good (since vol_days are labeled already - we generate a feature)
+            - <s> RF
+                - 2014-2018 data
+                - 2007-2018 data
+            - NN
+    *** RESULT:***
+        - 64 gigs not enough memory to generate TFIDF-SVD min3 vectors  for 2007-2018
+        - clustering (evaluated w/ 2014-2018 tfidf-svd min3 vectors):
+            - 6 clusters -> avg ~51% purity (when normalized to reflect HIGH FOUND / ALL HIGH)
+            - 15 clusters -> avg ~65% purity (but still the ABS purity of high in the best cluster is very low!)
+            - summary: highs are scattered across all classes. even if high is max purity normalized (e.g., 24% of highs are in a class and surpass 14% of lows - its still ~14 highs compared to 500 lows)
+                - NO GOOD SEPARATION
+        - classification:
+            - RF for 2014-2018 :
+                - when setting classweight of HIGH to 100 (compared to 1 and 1 for low and med) recall is great (some of the time for test...). precision is bad though in both training and testing. (~20%)
+                    - good precision for test may be comming from overfitting train data: if overfit then when we see another datapoint from similar time period it will likely classify it correctly since news overlapps
+                        - ***TODO*** change test/train split so that test is in future of split - not randomly distributed
+            - RF for 2007-2018 :
+                - 1. update calculation of TFIDF-SVD min3 to only have dimensionality of 300 and see if that enables us to gen the labels
+                    - if that doesn't work, try with min5
+                    - IN PROGRESS
+            - NN for 2014-2018 :
+                - IN PROGRESS
+0. <s> assess documents -vs- volatility - document level TF-IDF representation
+    - more reflective of where real value is (some documents do affect vol and some do not)
+    - consider representations of documents that may capture data relevant to predicting volatility
+        - tfidf
+        - basic word vector combinations
+            - averaging
+            - averaging nouns
+        - consider NLP features such as:
+            - document catagory
+            - document entities
+            - sentiment
+        - SEARCH LITERATURE
+    - assess promising representations of data relevant to predicing period statistically
+        - promising representations are those generated from above task
+        - consider clustering each document and then seeing whether clusters contain good separation of classes
+        - other assessment methods
+    0. <s> TF-IDF representation
+        0. <s> represent documents as TF-IDF vectors
+        0. <s> assess TF-IDF vector documents w/ clustering
+            - **consider**
+                - no clear label for which document corresponds to what volatility
+            - plan:
+                - define which documents belong to each vol_day
+                - conduct tf-idf on each document
+                - evaluate error by:
+                    - determining purity of the label of each document in a cluster
+                        - **NOTE:** labels are probabilistic in this context
+            1. <s> define ids of each news document (correspoding to ids in tf-idf dataframe) that is part of each vol_day
+            2. <s> calculate probability of a document being found in a vol_day labeled X
+                - generates news/label_probability. ...
+                - since vol_day documents overlap (e.g., past 2 days or past 3 days) some documents are right on the border - we are not as sure whether these documents are high or low class
+                - so, if the document is found in 3 labels - 2 HIGH and 1 MED, make sure that its probability for HIGH=2/3, MED=1/3, LOW=0
+                - the probability measure will then be used to calculate error more accurately
+            3. <s> cluster and evaluate purity of clusters
+                - consider how to calculate purity given that some documents are part of high and low days
+                - perhaps the "error" should be considered as 1 - probability of being that label
+                    - e.g., if predicted HIGH and has 2/3 probability of being HIGH error = 1-2/3 = 1/3;
+                    - e.g., if predicted HIGH and has 100% prob of being HIGH, error = 1-1=0;
+                - ** RESULT ** high purity is very very poor: max 17%, LOW is everywhere w/ max purity at ~60%. Clusters do not find meaningful information for TF-IDF vector representation
+        0. <s> assess TF-IDF vector documents w/ regression
+            - methods:
+                1. predict probability of it being part of a labeled vol_day
+            - error metric:
+                - as before, consider the probability of being in the label -vs- prediction
+                - simply attempt to predict the probability of being labeled high: regression problem
+            - ** RESULTS**
+                - w/ logistic regression on 2018 data - RMSE of 0.33 for labels ni 0-1 range
+                - w/ NN on 2018 data - RMSE of 0.33,0.32 for labels in 0-1 range
+                    - regardless of layer combinations
+            - ** summary ** since this is a very non direct metric to attempt to classify, probably best to move straight towards goal at this point and start on next part. This is likely a more challenging task than the goal of the project in the first place.
