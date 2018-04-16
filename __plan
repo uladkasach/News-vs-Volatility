@@ -1,4 +1,6 @@
 # immediately
+0. generate a baseline model that attempts to predict volatility based on prior volatility
+    - should be a strong baseline since papers show that volatility is autoregressive
 0. assess vol_day documents -vs- volatility - combination of documents into representation for past vol_day relevant news
     - predict vol_day based on these documents (BASELINE FOR GOAL)
     - methods:
@@ -24,6 +26,7 @@
                 - merge list of id's and list of vectors durring training (will take forever - rather than just taking lots of memory)
         - 2. <s> represent data explicitly: feautres = [...documnets] and build this from the `vol_day_news_ids` data
             - creates `vctors.for_indicies...`
+        - 3. create RNN NN model to handle sequences and predict
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)

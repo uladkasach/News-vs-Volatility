@@ -40,7 +40,6 @@ def convert_ids_to_vectors(news):
     print(len(vectors));
     return vectors;
 
-
 ## for each day in volatility data, create a bag of words dict for words/frequencies found in that period
 print("extracting full tokens for range")
 data = vol_data; # rename dataframe now that we're going to be appending tokens for each date

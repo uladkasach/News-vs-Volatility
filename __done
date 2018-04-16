@@ -48,7 +48,7 @@
                 - 2014-2018 data
                 - 2007-2018 data
             - NN
-    *** RESULT:***
+    - *** RESULT:***
         - 64 gigs not enough memory to generate TFIDF-SVD min3 vectors  for 2007-2018
         - clustering (evaluated w/ 2014-2018 tfidf-svd min3 vectors):
             - 6 clusters -> avg ~51% purity (when normalized to reflect HIGH FOUND / ALL HIGH)
