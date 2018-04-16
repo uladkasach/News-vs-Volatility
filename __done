@@ -116,3 +116,31 @@
                 - w/ NN on 2018 data - RMSE of 0.33,0.32 for labels in 0-1 range
                     - regardless of layer combinations
             - ** summary ** since this is a very non direct metric to attempt to classify, probably best to move straight towards goal at this point and start on next part. This is likely a more challenging task than the goal of the project in the first place.
+0. <s> assess vol_day documents -vs- volatility - combination of documents into representation for past vol_day relevant news
+    - predict vol_day based on these documents (BASELINE FOR GOAL)
+    - methods:
+        - e.g., combine document level representations
+        - consider using sequential occurrence of documents ?
+            - e.g., RNN
+    - features:
+        - tf-idf vectors
+        - tf-idf vectors + timestamp
+        - (bag of words -> NN word embeddings)
+            - https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/
+                - defines how to let network learn words from bag of words automatically
+        - google-news vectors -> RNN into document representation -> timestamp
+    1. tf-idf vectors
+        - vectors already created previously
+        - 1. <s> think through how to represent data for each vol_day,
+            - each vol_day consists of
+                1. features : [...documents] (e.g., 50 documents - each represented as a vector)
+                2. label : "HIGH", "MEDIUM", "LOW" or just  Volatility
+            - documents repeat for vol_days up to n times-> options to represent data in a memory reasonable format:
+                - create hdf file that has each vector already (convert each id in vol_day_news_ids into the vectors)
+                    - replaces each integer with k floats (e.g., k=300 -> 300 feature vectors): could be huge file
+                - merge list of id's and list of vectors durring training (will take forever - rather than just taking lots of memory)
+        - 2. <s> represent data explicitly: feautres = [...documnets] and build this from the `vol_day_news_ids` data
+            - creates `vctors.for_indicies...`
+        - 3. <s> create RNN NN model to handle sequences and predict
+            - **result** for basic representation, it is simply predicting a low value for all.
+                - build baselines first and come back to predicting based off of tfidf

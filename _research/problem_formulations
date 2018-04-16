@@ -1,0 +1,10 @@
+1. regression of volatility
+    - featurs -> volatility
+        - features are sequences
+2. text classification : predict what volatility  will do after this news [46]
+    - using text, will volatility increase after this news, decrease, or remain relativly stable
+    - text -> volatility change
+    - ["up", "down", "stable"]
+3. event classification : predict what volatility based on this event
+    - next day, next week, next month
+    - predicts [increase, decrease] (stock context) [38]

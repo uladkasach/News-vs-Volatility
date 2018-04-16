@@ -1,32 +1,18 @@
 # immediately
 0. generate a baseline model that attempts to predict volatility based on prior volatility
     - should be a strong baseline since papers show that volatility is autoregressive
-0. assess vol_day documents -vs- volatility - combination of documents into representation for past vol_day relevant news
-    - predict vol_day based on these documents (BASELINE FOR GOAL)
-    - methods:
-        - e.g., combine document level representations
-        - consider using sequential occurrence of documents ?
-            - e.g., RNN
-    - features:
-        - tf-idf vectors
-        - tf-idf vectors + timestamp
-        - (bag of words -> NN word embeddings)
-            - https://machinelearningmastery.com/sequence-classification-lstm-recurrent-neural-networks-python-keras/
-                - defines how to let network learn words from bag of words automatically
-        - google-news vectors -> RNN into document representation -> timestamp
-    1. tf-idf vectors
-        - vectors already created previously
-        - 1. <s> think through how to represent data for each vol_day,
-            - each vol_day consists of
-                1. features : [...documents] (e.g., 50 documents - each represented as a vector)
-                2. label : "HIGH", "MEDIUM", "LOW" or just  Volatility
-            - documents repeat for vol_days up to n times-> options to represent data in a memory reasonable format:
-                - create hdf file that has each vector already (convert each id in vol_day_news_ids into the vectors)
-                    - replaces each integer with k floats (e.g., k=300 -> 300 feature vectors): could be huge file
-                - merge list of id's and list of vectors durring training (will take forever - rather than just taking lots of memory)
-        - 2. <s> represent data explicitly: feautres = [...documnets] and build this from the `vol_day_news_ids` data
-            - creates `vctors.for_indicies...`
-        - 3. create RNN NN model to handle sequences and predict
+    1. normalize data: mean =0, stdev = 1
+        - note, no activation functino should be applied since vol can be greater than 1
+    - *** results ***
+        - LSTM:128, LSTM:32, DROPOUT:0.2, DENSE:1
+            - t:30
+                - [0.34, 0.33]
+            - t:100
+                - 0.36, 0.32
+        - LSTM:32, LSTM:32, DROPOUT:0.2, DENSE:1:tanh
+            - [0.34, 0.33]
+        - plotting analysis of the above shows that it has captured the autoregressive phenomenon (predicts a less volatile and time delayed plot)
+            - see `prediction/results/baseline_regression.previous_price.png`
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)
