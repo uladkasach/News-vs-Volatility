@@ -14,6 +14,7 @@ parser.add_argument('path_to_data', help='Path to Volatility');
 parser.add_argument('-w', '--workers', metavar="D", type=int, default=1)
 parser.add_argument('-r', '--readable_output', action='store_true');
 parser.add_argument('-t', '--timesteps', metavar="D", type=int, default=30) # default is ~ one month of timesteps
+parser.add_argument('-o', '--overlap', metavar="D", type=int, default=5) # default is 5, the default measure for defining volatiltiy
 args = parser.parse_args();
 
 ## get data
@@ -30,18 +31,22 @@ stdev = data["Volatility"].std();
 data["Volatility"] = data["Volatility"].apply(lambda val: (val - mean)/stdev);
 
 ## generate dataset: y = volatility price, X = sequence of prior `timesteps`(a number) prices
+##      volatility_overlap deals with how volatility is calculated: volatlity is calculated for the future X days.
+##          this means that the volatility for March 7th, if X=5, will contain information about volatility of March 7th through 13th.
+##          because of this, we do not want to use the past X volatilities to predict it since each of them will have information about days in the target range (window overlap)
 print("building dataset");
-def extract_sequence_for_index(index, timesteps):
-    start_index = index-timesteps;
+def extract_sequence_for_index(index, timesteps, volatility_overlap):
+    start_index = index-timesteps-volatility_overlap;
     if(start_index < 0): start_index = 0;
-    stop_index = index-1;
+    stop_index = index-1-volatility_overlap;
+    if(stop_index < 0): stop_index = 0;
     relevant_data = data.loc[start_index:stop_index];
     relevant_vol = relevant_data["Volatility"].tolist();
     if(len(relevant_vol) != timesteps): return None;
     relevant_vol = np.array(relevant_vol);
     relevant_vol = relevant_vol.reshape(timesteps, 1);
     return relevant_vol;
-data["Features"] = data.apply(lambda row: extract_sequence_for_index(row.name, args.timesteps), axis=1)
+data["Features"] = data.apply(lambda row: extract_sequence_for_index(row.name, args.timesteps, args.overlap), axis=1)
 
 ## remove datapoints with sequences that do not have full timestep
 ##     - remove rows with null
