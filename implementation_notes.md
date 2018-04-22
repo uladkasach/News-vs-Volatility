@@ -1,0 +1,6 @@
+- classification -vs- regression problem
+    - we will not be able to achevie good performance with just news data when regressing.
+        - we can predict whether the volatility will increase or decrease or stay stable based on text, but not the absolute value.
+    - so:
+        - evaluate regression of the documents + the original date
+        - evaluate classification of increase, stable, decrease

@@ -144,3 +144,17 @@
         - 3. <s> create RNN NN model to handle sequences and predict
             - **result** for basic representation, it is simply predicting a low value for all.
                 - build baselines first and come back to predicting based off of tfidf
+0. <s>  generate a baseline model that attempts to predict volatility based on prior volatility
+    - should be a strong baseline since papers show that volatility is autoregressive
+    1. normalize data: mean =0, stdev = 1
+        - note, no activation functino should be applied since vol can be greater than 1
+    - *** results ***
+        - LSTM:128, LSTM:32, DROPOUT:0.2, DENSE:1
+            - t:30
+                - [0.34, 0.33]
+            - t:100
+                - 0.36, 0.32
+        - LSTM:32, LSTM:32, DROPOUT:0.2, DENSE:1:tanh
+            - [0.34, 0.33]
+        - plotting analysis of the above shows that it has captured the autoregressive phenomenon (predicts a less volatile and time delayed plot)
+            - see `prediction/results/baseline_regression.previous_price.png`

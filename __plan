@@ -1,18 +1,7 @@
 # immediately
-0. generate a baseline model that attempts to predict volatility based on prior volatility
-    - should be a strong baseline since papers show that volatility is autoregressive
-    1. normalize data: mean =0, stdev = 1
-        - note, no activation functino should be applied since vol can be greater than 1
-    - *** results ***
-        - LSTM:128, LSTM:32, DROPOUT:0.2, DENSE:1
-            - t:30
-                - [0.34, 0.33]
-            - t:100
-                - 0.36, 0.32
-        - LSTM:32, LSTM:32, DROPOUT:0.2, DENSE:1:tanh
-            - [0.34, 0.33]
-        - plotting analysis of the above shows that it has captured the autoregressive phenomenon (predicts a less volatile and time delayed plot)
-            - see `prediction/results/baseline_regression.previous_price.png`
+0. create baseline regressing volatility based on prior volatility + how long ago each prior volatiltiy occured
+    - each datapoint in sequence is now [volatility, how_long_ago_measured]
+0. create baseline predicting whether increase or decrease will occur
 0. generate baseline representations of news (see `ideas/text_rep...` for all)
     - bag of words (all, title, content)
     - tf-idf (all, title, content)
