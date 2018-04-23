@@ -15,6 +15,7 @@ parser.add_argument('-w', '--workers', metavar="D", type=int, default=1)
 parser.add_argument('-r', '--readable_output', action='store_true');
 parser.add_argument('-t', '--timesteps', metavar="D", type=int, default=30) # default is ~ one month of timesteps
 parser.add_argument('-o', '--overlap', metavar="D", type=int, default=5) # default is 5, the default measure for defining volatiltiy
+parser.add_argument('-e', '--epochs', metavar="D", type=int, default=20) 
 args = parser.parse_args();
 
 ## get data
@@ -99,7 +100,7 @@ model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_square
 
 # Train the model, iterating on the data in batches of 32 samples
 print("fitting NN model");
-model.fit(X_train, y_train, epochs=2, batch_size=200)
+model.fit(X_train, y_train, epochs=args.epochs, batch_size=200)
 
 ## calculate performance
 def calculate_high_performance(y_true, y_pred):

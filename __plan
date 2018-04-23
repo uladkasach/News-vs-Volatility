@@ -1,4 +1,11 @@
 # immediately
+0. re-assess calculation of volatility
+0. evaluate overlap days -vs- volatility future looking
+    - ** results ** : performance is significantly affected by the overlap- as expected
+        - for 5 day future volatilities, 0 overlap->great performance (0.13 MSE) where as 5 overlap (which is required to not provide info leakage) produces much worse performance (0.48 MSE)
+        - for 2 day
+        - for 10 day
+        - for 1 day (*)
 0. create baseline regressing volatility based on prior volatility + how long ago each prior volatiltiy occured
     - each datapoint in sequence is now [volatility, how_long_ago_measured]
 0. create baseline predicting whether increase or decrease will occur
